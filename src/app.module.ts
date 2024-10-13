@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { HeroesModule } from './heroes/heroes.module';
+import { ErrorMiddleware } from './middlewares/error.middleware';
 
 @Module({
   imports: [
@@ -10,4 +11,8 @@ import { HeroesModule } from './heroes/heroes.module';
     HeroesModule,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ErrorMiddleware).forRoutes('*');
+  }
+}
